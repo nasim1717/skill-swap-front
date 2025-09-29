@@ -6,21 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-
-interface Skill {
-  id: string;
-  name: string;
-  category?: string;
-}
-
-interface SkillManagementProps {
-  offeredSkills: Skill[];
-  wantedSkills: Skill[];
-  addOfferedSkill: (skillName: string) => void;
-  addWantedSkill: (skillName: string) => void;
-  removeOfferedSkill: (id: string) => void;
-  removeWantedSkill: (id: string) => void;
-}
+import { SkillManagementProps } from "@/lib/interface";
 
 const SkillManagement = ({
   offeredSkills,
@@ -29,6 +15,7 @@ const SkillManagement = ({
   addWantedSkill,
   removeOfferedSkill,
   removeWantedSkill,
+  handleKeyPress,
 }: SkillManagementProps) => {
   const [newOfferedSkill, setNewOfferedSkill] = useState("");
   const [newWantedSkill, setNewWantedSkill] = useState("");
@@ -44,12 +31,6 @@ const SkillManagement = ({
     if (newWantedSkill.trim()) {
       addWantedSkill(newWantedSkill.trim());
       setNewWantedSkill("");
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent, action: () => void) => {
-    if (e.key === "Enter") {
-      action();
     }
   };
 
@@ -70,9 +51,7 @@ const SkillManagement = ({
               <Tag className="w-5 h-5" />
               <span>Skills I Can Offer</span>
             </CardTitle>
-            <CardDescription>
-              Share the skills you can teach others
-            </CardDescription>
+            <CardDescription>Share the skills you can teach others</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex space-x-2">
@@ -89,7 +68,7 @@ const SkillManagement = ({
                   className="transition-all duration-smooth"
                 />
               </div>
-              <Button 
+              <Button
                 onClick={handleAddOfferedSkill}
                 variant="success"
                 size="icon"
@@ -140,9 +119,7 @@ const SkillManagement = ({
               <Tag className="w-5 h-5" />
               <span>Skills I Want to Learn</span>
             </CardTitle>
-            <CardDescription>
-              Specify the skills you'd like to learn from others
-            </CardDescription>
+            <CardDescription>Specify the skills you'd like to learn from others</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex space-x-2">
@@ -159,7 +136,7 @@ const SkillManagement = ({
                   className="transition-all duration-smooth"
                 />
               </div>
-              <Button 
+              <Button
                 onClick={handleAddWantedSkill}
                 size="icon"
                 disabled={!newWantedSkill.trim()}
@@ -204,13 +181,11 @@ const SkillManagement = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-center space-x-4 pt-4">
-        <Button variant="outline" size="lg">
+      <div className="flex justify-end space-x-4">
+        {/* <Button variant="outline" size="lg">
           Save as Draft
-        </Button>
-        <Button size="lg">
-          Update Profile
-        </Button>
+        </Button> */}
+        <Button size="lg">Update Profile</Button>
       </div>
     </div>
   );
