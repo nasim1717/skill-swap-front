@@ -97,7 +97,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-12">
         <Card className="w-full max-w-md shadow-lg border-0 bg-card/80 backdrop-blur-sm">
           <CardHeader className="space-y-1 text-center">
-            <div className="w-16 h-12  rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-20 h-12  rounded-full flex items-center justify-center mx-auto mb-4">
               <img src={Logo} className=" " />
             </div>
             <CardTitle className="text-2xl font-bold">

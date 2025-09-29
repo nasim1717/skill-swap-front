@@ -10,8 +10,8 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-primary" />
       <div className="relative z-10 flex flex-col justify-center p-12 text-white">
         <div className="flex items-center space-x-3 mb-8">
-          <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
-            <img src={Logo} className="w-9 h-8 text-white" />
+          <div className="w-12 h-12 rounded-lg flex items-center justify-center backdrop-blur-sm">
+            <img src={Logo} className=" text-white" />
           </div>
           <h1 className="text-3xl font-bold">SkillSwap</h1>
         </div>

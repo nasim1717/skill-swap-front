@@ -10,7 +10,7 @@ import Matches from "./pages/Matches";
 import Messages from "./pages/Messages";
 import Auth from "./pages/Auth/Auth";
 import NotFound from "./pages/NotFound";
-import Index from "./pages/Landing";
+import Home from "./pages/Home/Home";
 
 const queryClient = new QueryClient();
 
@@ -22,8 +22,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/auth" element={<Auth />} />
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Layout />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
             <Route path="profile" element={<Profile />} />
             <Route path="matches" element={<Matches />} />
