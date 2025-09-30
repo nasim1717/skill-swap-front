@@ -1,16 +1,6 @@
 import { useState } from "react";
 import { Outlet, useLocation, Link } from "react-router-dom";
-import { 
-  Menu, 
-  X, 
-  Home, 
-  User, 
-  Users, 
-  MessageSquare, 
-  Settings,
-  Moon,
-  Sun
-} from "lucide-react";
+import { Menu, X, Home, User, Users, MessageSquare, Settings, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +14,6 @@ const Layout = () => {
     { name: "Profile", href: "/profile", icon: User },
     { name: "Matches", href: "/matches", icon: Users },
     { name: "Messages", href: "/messages", icon: MessageSquare },
-    { name: "Settings", href: "/settings", icon: Settings },
   ];
 
   const toggleDarkMode = () => {
@@ -49,9 +38,7 @@ const Layout = () => {
               <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
                 <Users className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-semibold text-sidebar-foreground">
-                SkillSwap
-              </span>
+              <span className="text-xl font-semibold text-sidebar-foreground">SkillSwap</span>
             </div>
           </div>
 
@@ -84,12 +71,8 @@ const Layout = () => {
                 <User className="w-5 h-5 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-sidebar-foreground truncate">
-                  John Doe
-                </p>
-                <p className="text-xs text-sidebar-foreground/60 truncate">
-                  john@example.com
-                </p>
+                <p className="text-sm font-medium text-sidebar-foreground truncate">John Doe</p>
+                <p className="text-xs text-sidebar-foreground/60 truncate">john@example.com</p>
               </div>
             </div>
           </div>
@@ -99,8 +82,8 @@ const Layout = () => {
       {/* Mobile menu overlay */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div 
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm" 
+          <div
+            className="fixed inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
           <div className="fixed inset-y-0 left-0 flex w-64 flex-col bg-sidebar border-r border-sidebar-border">
@@ -111,9 +94,7 @@ const Layout = () => {
                   <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
                     <Users className="w-5 h-5 text-white" />
                   </div>
-                  <span className="text-xl font-semibold text-sidebar-foreground">
-                    SkillSwap
-                  </span>
+                  <span className="text-xl font-semibold text-sidebar-foreground">SkillSwap</span>
                 </div>
                 <Button
                   variant="ghost"
@@ -153,12 +134,8 @@ const Layout = () => {
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-sidebar-foreground truncate">
-                      John Doe
-                    </p>
-                    <p className="text-xs text-sidebar-foreground/60 truncate">
-                      john@example.com
-                    </p>
+                    <p className="text-sm font-medium text-sidebar-foreground truncate">John Doe</p>
+                    <p className="text-xs text-sidebar-foreground/60 truncate">john@example.com</p>
                   </div>
                 </div>
               </div>
@@ -182,10 +159,10 @@ const Layout = () => {
                 <Menu className="h-5 w-5" />
               </Button>
               <h1 className="text-lg font-semibold text-foreground">
-                {navigation.find(item => isActive(item.href))?.name || "SkillSwap"}
+                {navigation.find((item) => isActive(item.href))?.name || "SkillSwap"}
               </h1>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
