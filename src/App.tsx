@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Matches from "./pages/Matches/Matches";
-import Messages from "./pages/Messages";
+import Messages from "./pages/Messages/Messages";
 import Auth from "./pages/Auth/Auth";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home/Home";

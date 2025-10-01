@@ -41,4 +41,21 @@ export interface User {
     rating: number;
     location: string;
     matchScore: number;
+};
+
+export interface Message {
+    id: string;
+    senderId: string;
+    content: string;
+    timestamp: string;
+    isRead: boolean;
+}
+
+export interface Conversation {
+    id: string;
+    userName: string;
+    lastMessage: string;
+    timestamp: string;
+    unreadCount: number;
+    isOnline: boolean;
 }
