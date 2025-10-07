@@ -1,6 +1,17 @@
 import { useState } from "react";
-import { Outlet, useLocation, Link } from "react-router-dom";
-import { Menu, X, Home, User, Users, MessageSquare, Settings, Moon, Sun } from "lucide-react";
+import { Outlet, useLocation, Link, useNavigate } from "react-router-dom";
+import {
+  Menu,
+  X,
+  Home,
+  User,
+  Users,
+  MessageSquare,
+  Settings,
+  Moon,
+  Sun,
+  LogOut,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -8,6 +19,7 @@ const Layout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: Home },
@@ -19,6 +31,11 @@ const Layout = () => {
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated");
+    navigate("/auth");
   };
 
   const isActive = (path: string) => {
@@ -66,7 +83,7 @@ const Layout = () => {
 
           {/* User Profile Section */}
           <div className="flex-shrink-0 p-4 border-t border-sidebar-border">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3 mb-3">
               <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
                 <User className="w-5 h-5 text-white" />
               </div>
@@ -75,6 +92,15 @@ const Layout = () => {
                 <p className="text-xs text-sidebar-foreground/60 truncate">john@example.com</p>
               </div>
             </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleLogout}
+              className="w-full justify-start"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Logout
+            </Button>
           </div>
         </div>
       </aside>
@@ -129,7 +155,7 @@ const Layout = () => {
               </nav>
 
               <div className="flex-shrink-0 p-4 border-t border-sidebar-border">
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 mb-3">
                   <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
                     <User className="w-5 h-5 text-white" />
                   </div>
@@ -138,6 +164,15 @@ const Layout = () => {
                     <p className="text-xs text-sidebar-foreground/60 truncate">john@example.com</p>
                   </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="w-full justify-start"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
               </div>
             </div>
           </div>
