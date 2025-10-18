@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Home from "./pages/Home/Home";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
+import { AuthProvider } from "./provider/AuthProvider";
 
 const queryClient = new QueryClient();
 
@@ -19,20 +20,22 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="profile" element={<Profile />} />
-            <Route path="matches" element={<Matches />} />
-            <Route path="messages" element={<Messages />} />
-          </Route>
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="profile" element={<Profile />} />
+              <Route path="matches" element={<Matches />} />
+              <Route path="messages" element={<Messages />} />
+            </Route>
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

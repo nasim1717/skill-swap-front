@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,12 +7,47 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { cn } from "@/lib/utils";
 import HeroSection from "./HeroSection";
 import Logo from "../../../assets/icon.png";
+import { useMutation } from "@tanstack/react-query";
+import { loginUser, registerUser } from "@/services/authService";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
-interface AuthFormProps {
-  onAuthSuccess?: () => void;
-}
+const AuthForm = () => {
+  const navigate = useNavigate();
+  const { setUser } = useAuthContext();
+  // Register
+  const { mutate: handleRegister, isPending: isRegisterLoading } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (data: any) => {
+      toast.success("User registered successfully");
+      setUser(data.data.user);
+      navigate("/");
+    },
+    onError: (registerError: any) => {
+      const errorMessagr = registerError?.response?.data?.errors;
+      for (const [key, value] of Object.entries(errorMessagr)) {
+        setErrors((prev) => ({ ...prev, [key]: value }));
+      }
+    },
+  });
 
-const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
+  // login
+  const { mutate: handleLogin, isPending: isLoginLoading } = useMutation({
+    mutationFn: loginUser,
+    onSuccess: (data: any) => {
+      toast.success("User logged in successfully");
+      setUser(data.data.user);
+      navigate("/");
+    },
+    onError: (registerError: any) => {
+      const errorMessagr = registerError?.response?.data?.errors;
+      for (const [key, value] of Object.entries(errorMessagr)) {
+        setErrors((prev) => ({ ...prev, [key]: value }));
+      }
+    },
+  });
+
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -20,10 +55,9 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "",
+    confirm_password: "",
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, unknown>>({});
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -33,49 +67,14 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.email) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
-
-    if (!isLogin) {
-      if (!formData.name) {
-        newErrors.name = "Name is required";
-      }
-
-      if (!formData.confirmPassword) {
-        newErrors.confirmPassword = "Please confirm your password";
-      } else if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = "Passwords do not match";
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      onAuthSuccess?.();
-    }, 1500);
+    if (!isLogin) {
+      handleRegister(formData);
+    } else {
+      handleLogin(formData);
+    }
   };
 
   const toggleMode = () => {
@@ -85,7 +84,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
       name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      confirm_password: "",
     });
   };
 
@@ -115,7 +114,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
               {!isLogin && (
                 <div className="space-y-2">
                   <Label htmlFor="name" className="text-sm font-medium">
-                    Full Name
+                    Name
                   </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -131,7 +130,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
                       onChange={(e) => handleInputChange("name", e.target.value)}
                     />
                   </div>
-                  {errors.name && <p className="text-sm text-destructive">{errors.name}</p>}
+                  {errors.name && <p className="text-sm text-destructive">{String(errors.name)}</p>}
                 </div>
               )}
 
@@ -153,7 +152,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
                     onChange={(e) => handleInputChange("email", e.target.value)}
                   />
                 </div>
-                {errors.email && <p className="text-sm text-destructive">{errors.email}</p>}
+                {errors.email && <p className="text-sm text-destructive">{String(errors.email)}</p>}
               </div>
 
               <div className="space-y-2">
@@ -183,7 +182,9 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </Button>
                 </div>
-                {errors.password && <p className="text-sm text-destructive">{errors.password}</p>}
+                {errors.password && (
+                  <p className="text-sm text-destructive">{String(errors.password)}</p>
+                )}
               </div>
 
               {!isLogin && (
@@ -199,11 +200,11 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
                       placeholder="Confirm your password"
                       className={cn(
                         "pl-10 pr-10 transition-all duration-smooth",
-                        errors.confirmPassword &&
+                        errors.confirm_password &&
                           "border-destructive focus-visible:ring-destructive"
                       )}
-                      value={formData.confirmPassword}
-                      onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+                      value={formData.confirm_password}
+                      onChange={(e) => handleInputChange("confirm_password", e.target.value)}
                     />
                     <Button
                       type="button"
@@ -219,14 +220,14 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
                       )}
                     </Button>
                   </div>
-                  {errors.confirmPassword && (
-                    <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                  {errors.confirm_password && (
+                    <p className="text-sm text-destructive">{String(errors.confirm_password)}</p>
                   )}
                 </div>
               )}
 
-              <Button type="submit" size="lg" className="w-full mt-6" disabled={isLoading}>
-                {isLoading ? (
+              <Button type="submit" size="lg" className="w-full mt-6" disabled={isRegisterLoading}>
+                {isRegisterLoading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     <span>{isLogin ? "Signing in..." : "Creating account..."}</span>
