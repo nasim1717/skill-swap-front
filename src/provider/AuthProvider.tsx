@@ -6,7 +6,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   });
-  console.log("User logged in:", user);
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));

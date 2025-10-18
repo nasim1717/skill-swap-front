@@ -12,6 +12,7 @@ import Home from "./pages/Home/Home";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
 import { AuthProvider } from "./provider/AuthProvider";
+import PrivateRoute from "./pages/Auth/PrivateRoute";
 
 const queryClient = new QueryClient();
 
@@ -25,12 +26,15 @@ const App = () => (
           <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="profile" element={<Profile />} />
-              <Route path="matches" element={<Matches />} />
-              <Route path="messages" element={<Messages />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="profile" element={<Profile />} />
+                <Route path="matches" element={<Matches />} />
+                <Route path="messages" element={<Messages />} />
+              </Route>
             </Route>
+
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
