@@ -7,6 +7,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return user ? JSON.parse(user) : null;
   });
 
+  const [accsessToken, setAccsessToken] = useState<string | null>(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    return accessToken ? accessToken : null;
+  });
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
@@ -15,5 +20,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [user]);
 
-  return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    if (accsessToken) {
+      localStorage.setItem("accessToken", accsessToken);
+    } else {
+      localStorage.removeItem("accessToken");
+    }
+  }, [accsessToken]);
+
+  return (
+    <AuthContext.Provider value={{ user, setUser, accsessToken, setAccsessToken }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

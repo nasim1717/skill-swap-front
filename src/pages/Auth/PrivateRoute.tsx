@@ -2,9 +2,9 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
 export default function PrivateRoute() {
-  const { user } = useAuthContext();
+  const { accsessToken } = useAuthContext();
 
-  if (!user) {
+  if (!accsessToken) {
     return <Navigate to="/auth" replace />;
   }
 

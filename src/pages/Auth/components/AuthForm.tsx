@@ -15,13 +15,14 @@ import { useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuthContext();
+  const { setUser, setAccsessToken } = useAuthContext();
   // Register
   const { mutate: handleRegister, isPending: isRegisterLoading } = useMutation({
     mutationFn: registerUser,
     onSuccess: (data: any) => {
       toast.success("User registered successfully");
       setUser(data.data.user);
+      setAccsessToken(data.data.access_token);
       navigate("/");
     },
     onError: (registerError: any) => {
@@ -38,6 +39,7 @@ const AuthForm = () => {
     onSuccess: (data: any) => {
       toast.success("User logged in successfully");
       setUser(data.data.user);
+      setAccsessToken(data.data.access_token);
       navigate("/");
     },
     onError: (registerError: any) => {
