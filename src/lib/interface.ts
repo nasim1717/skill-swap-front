@@ -5,8 +5,8 @@ export interface Skill {
 };
 
 export interface SkillManagementProps {
-    offeredSkills: Skill[];
-    wantedSkills: Skill[];
+    offeredSkills: string;
+    wantedSkills: string;
     addOfferedSkill: (skillName: string) => void;
     addWantedSkill: (skillName: string) => void;
     removeOfferedSkill: (id: string) => void;

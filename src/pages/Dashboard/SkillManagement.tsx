@@ -83,19 +83,19 @@ const SkillManagement = ({
             </div>
 
             <div className="space-y-2">
-              {offeredSkills.length > 0 ? (
+              {offeredSkills?.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
-                  {offeredSkills.map((skill) => (
+                  {offeredSkills?.split(",").map((skill, index) => (
                     <Badge
-                      key={skill.id}
+                      key={index}
                       variant="secondary"
                       className="flex items-center space-x-2 px-3 py-1 text-sm bg-success/10 text-success border border-success/20 hover:bg-success/20 transition-all duration-smooth"
                     >
-                      <span>{skill.name}</span>
+                      <span>{skill}</span>
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        onClick={() => removeOfferedSkill(skill.id)}
+                        onClick={() => removeOfferedSkill(index.toString())}
                         className="w-4 h-4 p-0 hover:bg-transparent text-success hover:text-success/70"
                       >
                         <X className="w-3 h-3" />
@@ -150,19 +150,19 @@ const SkillManagement = ({
             </div>
 
             <div className="space-y-2">
-              {wantedSkills.length > 0 ? (
+              {wantedSkills?.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
-                  {wantedSkills.map((skill) => (
+                  {wantedSkills?.split(",").map((skill, index) => (
                     <Badge
-                      key={skill.id}
+                      key={index}
                       variant="secondary"
                       className="flex items-center space-x-2 px-3 py-1 text-sm bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all duration-smooth"
                     >
-                      <span>{skill.name}</span>
+                      <span>{skill}</span>
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        onClick={() => removeWantedSkill(skill.id)}
+                        onClick={() => removeWantedSkill(index.toString())}
                         className="w-4 h-4 p-0 hover:bg-transparent text-primary hover:text-primary/70"
                       >
                         <X className="w-3 h-3" />
@@ -185,7 +185,7 @@ const SkillManagement = ({
         {/* <Button variant="outline" size="lg">
           Save as Draft
         </Button> */}
-        <Button size="lg">Update Profile</Button>
+        {/* <Button size="lg">Update Profile</Button> */}
       </div>
     </div>
   );

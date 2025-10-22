@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Profile from "./pages/Profile/Profile";
 import { AuthProvider } from "./provider/AuthProvider";
 import PrivateRoute from "./pages/Auth/PrivateRoute";
+import { ConfirmDialogProvider } from "./provider/ConfirmDialogProvider";
 
 const queryClient = new QueryClient();
 
@@ -21,25 +22,27 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/home" element={<Home />} />
-            <Route element={<PrivateRoute />}>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="profile" element={<Profile />} />
-                <Route path="matches" element={<Matches />} />
-                <Route path="messages" element={<Messages />} />
+      <ConfirmDialogProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/home" element={<Home />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="profile" element={<Profile />} />
+                  <Route path="matches" element={<Matches />} />
+                  <Route path="messages" element={<Messages />} />
+                </Route>
               </Route>
-            </Route>
 
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ConfirmDialogProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

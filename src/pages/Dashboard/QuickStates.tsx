@@ -5,7 +5,7 @@ export default function QuickStates({ offeredSkills, wantedSkills }) {
   const stats = [
     {
       title: "Skills Offered",
-      value: offeredSkills.length.toString(),
+      value: offeredSkills ? offeredSkills.split(",").length : 0,
       description: "Active skills you can teach",
       icon: BookOpen,
       color: "text-success",
@@ -14,7 +14,7 @@ export default function QuickStates({ offeredSkills, wantedSkills }) {
     },
     {
       title: "Skills Learning",
-      value: wantedSkills.length.toString(),
+      value: wantedSkills ? wantedSkills.split(",").length : 0,
       description: "Skills you want to learn",
       icon: TrendingUp,
       color: "text-primary",

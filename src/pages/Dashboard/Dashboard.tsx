@@ -1,52 +1,100 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import SkillManagement from "@/pages/Dashboard/SkillManagement";
 import { useState } from "react";
 import WelcomeSection from "./WelcomeSection";
 import QuickStates from "./QuickStates";
-import QuickActions from "./QuickActions";
-import { Skill } from "@/lib/interface";
 import RecentActivity from "./RecentActivity";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import {
+  createSkillOfferd,
+  createSkillWantted,
+  getSkillOfferd,
+  getSkillWantted,
+} from "@/services/skillService";
+import { toast } from "sonner";
+import { useConfirmDialog } from "@/provider/ConfirmDialogProvider";
 
 const Dashboard = () => {
-  // Skills state
-  const [offeredSkills, setOfferedSkills] = useState<Skill[]>([
-    { id: "1", name: "React Development", category: "Frontend" },
-    { id: "2", name: "UI/UX Design", category: "Design" },
-  ]);
-  const [wantedSkills, setWantedSkills] = useState<Skill[]>([
-    { id: "3", name: "Python", category: "Backend" },
-    { id: "4", name: "Machine Learning", category: "AI/ML" },
-  ]);
+  const { confirm } = useConfirmDialog();
+  // offer skill query
+  const {
+    data: offeredSkills,
+    isLoading: isOfferdSkillLoading,
+    isError: isOfferdSkillError,
+    refetch: skillOfferdRefetch,
+  } = useQuery({
+    queryKey: ["skillsOfferd"], // unique key for cache
+    queryFn: getSkillOfferd,
+  });
 
-  const generateId = () => Math.random().toString(36).substr(2, 9);
+  const { mutate: handleAddOfferedSkill, isPending: isAddOfferedSkillLoading } = useMutation({
+    mutationFn: createSkillOfferd,
+    onSuccess: () => {
+      skillOfferdRefetch();
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+
+  // wanted skill query
+  const {
+    data: wantedSkills,
+    isLoading: isWantedSkillLoading,
+    isError: isWantedSkillError,
+    refetch: skillWantedRefetch,
+  } = useQuery({
+    queryKey: ["skillsWanted"], // unique key for cache
+    queryFn: getSkillWantted,
+  });
+
+  const { mutate: handleWantedSkill, isPending: isAddWantedSkillLoading } = useMutation({
+    mutationFn: createSkillWantted,
+    onSuccess: () => {
+      skillWantedRefetch();
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
 
   const addOfferedSkill = (skillName: string) => {
     if (skillName.trim()) {
-      const newSkill: Skill = {
-        id: generateId(),
-        name: skillName.trim(),
-      };
-      setOfferedSkills([...offeredSkills, newSkill]);
+      const newSkill = skillName;
+      const concatSkill = offeredSkills?.data?.skills
+        ? offeredSkills?.data?.skills?.concat(",", newSkill)
+        : newSkill;
+
+      handleAddOfferedSkill({ skills: concatSkill });
     }
   };
 
   const addWantedSkill = (skillName: string) => {
     if (skillName.trim()) {
-      const newSkill: Skill = {
-        id: generateId(),
-        name: skillName.trim(),
-      };
-      setWantedSkills([...wantedSkills, newSkill]);
+      const newSkill = skillName;
+      const concatSkill = wantedSkills?.data?.skills
+        ? wantedSkills?.data?.skills?.concat(",", newSkill)
+        : newSkill;
+
+      handleWantedSkill({ skills: concatSkill });
     }
   };
 
-  const removeOfferedSkill = (id: string) => {
-    setOfferedSkills(offeredSkills.filter((skill) => skill.id !== id));
+  const removeOfferedSkill = async (id: string) => {
+    const isConfirmed = await confirm("Are you sure you want to remove this skill?");
+    if (!isConfirmed) return;
+    const skillsSeperate = offeredSkills?.data?.skills?.split(",");
+    const filteredSkills = skillsSeperate?.filter((_, index: number) => index.toString() !== id);
+    const updatedSkills = filteredSkills?.join(",");
+    handleAddOfferedSkill({ skills: updatedSkills });
   };
 
   const removeWantedSkill = (id: string) => {
-    setWantedSkills(wantedSkills.filter((skill) => skill.id !== id));
+    const isConfirmed = confirm("Are you sure you want to remove this skill?");
+    if (!isConfirmed) return;
+    const skillsSeperate = wantedSkills?.data?.skills?.split(",");
+    const filteredSkills = skillsSeperate?.filter((_, index: number) => index.toString() !== id);
+    const updatedSkills = filteredSkills?.join(",");
+    handleWantedSkill({ skills: updatedSkills });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent, action: () => void) => {
@@ -60,7 +108,10 @@ const Dashboard = () => {
       <WelcomeSection />
 
       {/* Quick Stats */}
-      <QuickStates offeredSkills={offeredSkills} wantedSkills={wantedSkills} />
+      <QuickStates
+        offeredSkills={offeredSkills?.data?.skills}
+        wantedSkills={wantedSkills?.data?.skills}
+      />
 
       {/* Quick Actions */}
       {/* <QuickActions
@@ -74,8 +125,8 @@ const Dashboard = () => {
 
       {/* Skill Management Section */}
       <SkillManagement
-        offeredSkills={offeredSkills}
-        wantedSkills={wantedSkills}
+        offeredSkills={offeredSkills?.data?.skills}
+        wantedSkills={wantedSkills?.data?.skills}
         addOfferedSkill={addOfferedSkill}
         addWantedSkill={addWantedSkill}
         removeOfferedSkill={removeOfferedSkill}
