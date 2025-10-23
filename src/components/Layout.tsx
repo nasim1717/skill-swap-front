@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
 const Layout = () => {
+  const { user } = useAuthContext();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const location = useLocation();
@@ -23,7 +25,7 @@ const Layout = () => {
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: Home },
-    { name: "Profile", href: "/profile", icon: User },
+    { name: "Profile", href: `/profile/${user?.id}`, icon: User },
     { name: "Matches", href: "/matches", icon: Users },
     { name: "Messages", href: "/messages", icon: MessageSquare },
   ];

@@ -6,30 +6,51 @@ import { UserProfile } from "@/lib/interface";
 import { useState } from "react";
 import ProfileEditModal from "./ProfileEditModal";
 import { getInitials } from "@/helper/helper";
+import { useMutation } from "@tanstack/react-query";
+import { updateProfile } from "@/services/profileService";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useAuthContext } from "@/hooks/useAuthContext";
 
-export default function ProfileHeader({ averageRating, reviews }) {
-  const [profile, setProfile] = useState<UserProfile>({
-    name: "John Doe",
-    email: "john@example.com",
-    bio: "Passionate full-stack developer with 5+ years of experience. Love teaching React and learning new technologies. Always excited to share knowledge and connect with fellow learners!",
-    location: "San Francisco, CA",
-    joinDate: "January 2024",
-  });
+export default function ProfileHeader({
+  profileData,
+  profileRefetch,
+}: {
+  profileData: Record<string, any>;
+  profileRefetch: () => void;
+}) {
+  const { user } = useAuthContext();
+  const params = useParams();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editedProfile, setEditedProfile] = useState<UserProfile>(profile);
+  const [editedProfile, setEditedProfile] = useState({});
+
+  const {
+    mutate: handleUpdateProfile,
+    isPending: isUpdateProfileLoading,
+    isSuccess: isUpdateProfileSuccess,
+    error: updateProfileError,
+  } = useMutation({
+    mutationFn: updateProfile,
+    onSuccess: () => {
+      profileRefetch();
+      setIsEditModalOpen(false);
+      toast.success("Profile updated successfully");
+    },
+  });
+
   const handleEditProfile = () => {
-    setEditedProfile(profile);
+    setEditedProfile(profileData?.data);
     setIsEditModalOpen(true);
   };
 
   const handleSaveProfile = () => {
-    setProfile(editedProfile);
-    setIsEditModalOpen(false);
+    handleUpdateProfile(editedProfile);
   };
 
   const handleProfileChange = (field: keyof UserProfile, value: string) => {
     setEditedProfile((prev) => ({ ...prev, [field]: value }));
   };
+
   return (
     <>
       <Card className="shadow-md border-0 bg-card/80 backdrop-blur-sm">
@@ -38,7 +59,7 @@ export default function ProfileHeader({ averageRating, reviews }) {
             <div className="relative">
               <Avatar className="w-24 h-24">
                 <AvatarFallback className="text-2xl font-bold bg-gradient-primary text-white">
-                  {getInitials(profile.name)}
+                  {getInitials(profileData?.data?.name)}
                 </AvatarFallback>
               </Avatar>
               <Button size="icon-sm" className="absolute -bottom-2 -right-2 rounded-full shadow-md">
@@ -49,32 +70,36 @@ export default function ProfileHeader({ averageRating, reviews }) {
             <div className="flex-1 space-y-2">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold">{profile.name}</h1>
+                  <h1 className="text-2xl font-bold">{profileData?.data?.name}</h1>
                   <div className="flex items-center space-x-4 text-sm text-muted-foreground mt-1">
                     <div className="flex items-center space-x-1">
                       <Mail className="w-4 h-4" />
-                      <span>{profile.email}</span>
+                      <span>{profileData?.data?.email}</span>
                     </div>
-                    <div className="flex items-center space-x-1">
-                      <MapPin className="w-4 h-4" />
-                      <span>{profile.location}</span>
-                    </div>
+                    {profileData?.data?.location && (
+                      <div className="flex items-center space-x-1">
+                        <MapPin className="w-4 h-4" />
+                        <span>{profileData?.data?.location}</span>
+                      </div>
+                    )}
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-4 h-4" />
-                      <span>Joined {profile.joinDate}</span>
+                      <span>Joined {profileData?.data?.created_at}</span>
                     </div>
                   </div>
                 </div>
-                <Button
-                  onClick={handleEditProfile}
-                  className="flex items-center space-x-2 mt-4 sm:mt-0"
-                >
-                  <Edit className="w-4 h-4" />
-                  <span>Edit Profile</span>
-                </Button>
+                {params.id === user.id && (
+                  <Button
+                    onClick={handleEditProfile}
+                    className="flex items-center space-x-2 mt-4 sm:mt-0"
+                  >
+                    <Edit className="w-4 h-4" />
+                    <span>Edit Profile</span>
+                  </Button>
+                )}
               </div>
 
-              <p className="text-muted-foreground">{profile.bio}</p>
+              <p className="text-muted-foreground">{profileData?.data?.bio}</p>
 
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-1">
@@ -82,14 +107,15 @@ export default function ProfileHeader({ averageRating, reviews }) {
                     <Star
                       key={i}
                       className={`w-4 h-4 ${
-                        i < Math.floor(averageRating)
+                        i < Math.floor(profileData?.data?.average_rating)
                           ? "text-yellow-500 fill-current"
                           : "text-gray-300"
                       }`}
                     />
                   ))}
                   <span className="text-sm text-muted-foreground ml-2">
-                    {averageRating.toFixed(1)} ({reviews.length} reviews)
+                    {profileData?.data?.average_rating.toFixed(1)} (
+                    {profileData?.data?.total_reviews} reviews)
                   </span>
                 </div>
               </div>
@@ -103,6 +129,8 @@ export default function ProfileHeader({ averageRating, reviews }) {
         editedProfile={editedProfile}
         handleProfileChange={handleProfileChange}
         handleSaveProfile={handleSaveProfile}
+        isUpdateProfileLoading={isUpdateProfileLoading}
+        updateProfileError={updateProfileError}
       />
     </>
   );

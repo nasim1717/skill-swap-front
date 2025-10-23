@@ -2,8 +2,12 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { User } from "lucide-react";
 import RatingSection from "./RatingSection";
+import { useAuthContext } from "@/hooks/useAuthContext";
+import { useParams } from "react-router-dom";
 
-export default function SkillSection({ offeredSkills, wantedSkills }) {
+export default function SkillSection({ offeredSkills, wantedSkills, profileData, profileRefetch }) {
+  const { user } = useAuthContext();
+  const params = useParams();
   return (
     <div className="grid lg:grid-cols-3 gap-6">
       {/* Skills Section */}
@@ -19,7 +23,7 @@ export default function SkillSection({ offeredSkills, wantedSkills }) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {offeredSkills.map((skill, index) => (
+              {offeredSkills.map((skill: string, index: number) => (
                 <Badge
                   key={index}
                   variant="secondary"
@@ -43,7 +47,7 @@ export default function SkillSection({ offeredSkills, wantedSkills }) {
           </CardHeader>
           <CardContent>
             <div className="flex flex-wrap gap-2">
-              {wantedSkills.map((skill, index) => (
+              {wantedSkills.map((skill: string, index: number) => (
                 <Badge
                   key={index}
                   variant="secondary"
@@ -58,7 +62,9 @@ export default function SkillSection({ offeredSkills, wantedSkills }) {
       </div>
 
       {/* Rating Section */}
-      <RatingSection />
+      {user?.id !== params.id && (
+        <RatingSection profileData={profileData} profileRefetch={profileRefetch} />
+      )}
     </div>
   );
 }

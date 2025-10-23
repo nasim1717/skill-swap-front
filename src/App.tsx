@@ -31,7 +31,7 @@ const App = () => (
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Layout />}>
                   <Route index element={<Dashboard />} />
-                  <Route path="profile" element={<Profile />} />
+                  <Route path="profile/:id" element={<Profile />} />
                   <Route path="matches" element={<Matches />} />
                   <Route path="messages" element={<Messages />} />
                 </Route>

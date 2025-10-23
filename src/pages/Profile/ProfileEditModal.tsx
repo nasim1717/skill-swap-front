@@ -17,6 +17,8 @@ export default function ProfileEditModal({
   editedProfile,
   handleProfileChange,
   handleSaveProfile,
+  isUpdateProfileLoading,
+  updateProfileError,
 }) {
   return (
     <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
@@ -32,28 +34,48 @@ export default function ProfileEditModal({
             <Input
               id="edit-name"
               value={editedProfile.name}
+              type="text"
+              placeholder="Enter your name"
               onChange={(e) => handleProfileChange("name", e.target.value)}
             />
+            {updateProfileError?.response?.data?.errors?.name && (
+              <p className="text-sm text-red-500">
+                {updateProfileError?.response?.data?.errors?.name}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="edit-location">Location</Label>
             <Input
               id="edit-location"
+              type="text"
+              placeholder="Enter your location"
               value={editedProfile.location}
               onChange={(e) => handleProfileChange("location", e.target.value)}
             />
+            {updateProfileError?.response?.data?.errors?.location && (
+              <p className="text-sm text-red-500">
+                {updateProfileError?.response?.data?.errors?.location}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="edit-bio">Bio</Label>
             <Textarea
               id="edit-bio"
+              placeholder="Enter your bio"
               value={editedProfile.bio}
               onChange={(e) => handleProfileChange("bio", e.target.value)}
               rows={4}
               className="resize-none"
             />
+            {updateProfileError?.response?.data?.errors?.bio && (
+              <p className="text-sm text-red-500">
+                {updateProfileError?.response?.data?.errors?.bio}
+              </p>
+            )}
           </div>
         </div>
 
@@ -61,7 +83,9 @@ export default function ProfileEditModal({
           <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSaveProfile}>Save Changes</Button>
+          <Button disabled={isUpdateProfileLoading} onClick={handleSaveProfile}>
+            {isUpdateProfileLoading ? "Saving..." : "Save Changes"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

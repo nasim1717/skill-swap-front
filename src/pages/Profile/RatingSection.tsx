@@ -1,13 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import { reviewUser } from "@/services/profileService";
+import { useMutation } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+
 import { Star } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
-export default function RatingSection() {
+export default function RatingSection({ profileData, profileRefetch }) {
   const [userRating, setUserRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  const {
+    mutate: handleReviewSubmit,
+    isPending,
+    error: reviewError,
+  } = useMutation<any, AxiosError<any>, any>({
+    mutationFn: reviewUser,
+    onSuccess: () => {
+      toast.success("Review submitted successfully");
+      profileRefetch();
+      setComment("");
+      setUserRating(0);
+    },
+  });
+
   const handleStarClick = (rating: number) => {
     setUserRating(rating);
+  };
+
+  const handleReviewSubmitClick = () => {
+    handleReviewSubmit({ rating: userRating, comment, reviewed_user_id: profileData?.data?.id });
   };
   return (
     <div>
@@ -40,12 +65,23 @@ export default function RatingSection() {
           {userRating > 0 && (
             <div className="space-y-3">
               <Textarea
+                onChange={(e) => setComment(e.target.value)}
                 placeholder="Share your experience learning from John..."
                 className="resize-none"
                 rows={3}
               />
-              <Button size="sm" className="w-full">
-                Submit Review
+              {reviewError?.response?.data?.errors?.comment && (
+                <p className="text-sm text-red-500">
+                  {reviewError?.response?.data?.errors?.comment}
+                </p>
+              )}
+              <Button
+                disabled={isPending}
+                onClick={handleReviewSubmitClick}
+                size="sm"
+                className="w-full"
+              >
+                {isPending ? "Submitting..." : "Submit Review"}
               </Button>
             </div>
           )}
