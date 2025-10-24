@@ -19,3 +19,9 @@ export const getReviews = async (id: string) => {
     const res = await axiosInstance.get(`/users/reviews/${id}`);
     return res.data;
 };
+
+export const uploadProfileImage = async (formData: FormData) => {
+    return await axiosInstance.post("/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+    });
+};

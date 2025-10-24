@@ -11,6 +11,7 @@ import { updateProfile } from "@/services/profileService";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import ProfileAvatar from "./ProfileAvatar";
 
 export default function ProfileHeader({
   profileData,
@@ -36,6 +37,9 @@ export default function ProfileHeader({
       setIsEditModalOpen(false);
       toast.success("Profile updated successfully");
     },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   const handleEditProfile = () => {
@@ -56,7 +60,7 @@ export default function ProfileHeader({
       <Card className="shadow-md border-0 bg-card/80 backdrop-blur-sm">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
-            <div className="relative">
+            {/* <div className="relative">
               <Avatar className="w-24 h-24">
                 <AvatarFallback className="text-2xl font-bold bg-gradient-primary text-white">
                   {getInitials(profileData?.data?.name)}
@@ -65,7 +69,9 @@ export default function ProfileHeader({
               <Button size="icon-sm" className="absolute -bottom-2 -right-2 rounded-full shadow-md">
                 <Camera className="w-3 h-3" />
               </Button>
-            </div>
+            </div> */}
+
+            <ProfileAvatar profileData={profileData} />
 
             <div className="flex-1 space-y-2">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
