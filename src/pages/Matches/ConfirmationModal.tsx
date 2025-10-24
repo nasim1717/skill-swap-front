@@ -49,15 +49,15 @@ export default function ConfirmationModal({
               <div>
                 <p className="font-medium text-success">Can teach:</p>
                 <p className="text-muted-foreground">
-                  {selectedUser.offeredSkills.slice(0, 2).join(", ")}
-                  {selectedUser.offeredSkills.length > 2 && "..."}
+                  {selectedUser?.offerd_skills?.split(",").slice(0, 2).join(", ")}
+                  {selectedUser?.offerd_skills?.split(",").length > 2 && "..."}
                 </p>
               </div>
               <div>
                 <p className="font-medium text-primary">Wants to learn:</p>
                 <p className="text-muted-foreground">
-                  {selectedUser.wantedSkills.slice(0, 2).join(", ")}
-                  {selectedUser.wantedSkills.length > 2 && "..."}
+                  {selectedUser?.wanted_skills?.split(",").slice(0, 2).join(", ")}
+                  {selectedUser?.wanted_skills?.split(",").length > 2 && "..."}
                 </p>
               </div>
             </div>
