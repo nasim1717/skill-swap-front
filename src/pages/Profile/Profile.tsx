@@ -19,35 +19,6 @@ const Profile = () => {
     queryFn: ({ queryKey }) => getProfile(queryKey[1]),
   });
 
-  const reviews: Review[] = [
-    {
-      id: "1",
-      reviewerName: "Sarah Chen",
-      rating: 5,
-      comment:
-        "Excellent React teacher! Very patient and explains concepts clearly. Highly recommend!",
-      date: "2 weeks ago",
-      skill: "React",
-    },
-    {
-      id: "2",
-      reviewerName: "Mike Johnson",
-      rating: 5,
-      comment:
-        "Great JavaScript mentor. Helped me understand complex concepts with practical examples.",
-      date: "1 month ago",
-      skill: "JavaScript",
-    },
-    {
-      id: "3",
-      reviewerName: "Emma Davis",
-      rating: 4,
-      comment: "Very knowledgeable about TypeScript. Clear explanations and good teaching style.",
-      date: "2 months ago",
-      skill: "TypeScript",
-    },
-  ];
-
   if (isProfileLoading) {
     return <div>Loading...</div>;
   } else if (isProfileError) {
@@ -65,7 +36,7 @@ const Profile = () => {
         wantedSkills={profileData?.data?.skills_wanted?.split(",") || []}
       />
 
-      <ReviewSection reviews={reviews} />
+      <ReviewSection reviews={profileData?.data?.reviews || []} />
     </div>
   );
 };

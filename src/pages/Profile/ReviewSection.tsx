@@ -1,7 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Star } from "lucide-react";
 import { getInitials } from "@/helper/helper";
+import { Review } from "@/lib/interface";
+import moment from "moment";
+
 export default function ReviewSection({ reviews }) {
   return (
     <Card className="shadow-md border-0 bg-card/80 backdrop-blur-sm">
@@ -10,33 +11,20 @@ export default function ReviewSection({ reviews }) {
         <CardDescription>What others say about learning from John</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        {reviews.map((review) => (
+        {reviews.map((review: Review) => (
           <div key={review.id} className="border-b border-border last:border-b-0 pb-4 last:pb-0">
             <div className="flex items-start space-x-4">
               <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                {getInitials(review.reviewerName)}
+                {getInitials(String(review?.reviewer?.name))}
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <p className="font-medium">{review.reviewerName}</p>
-                    <div className="flex items-center space-x-2">
-                      <div className="flex space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={`w-3 h-3 ${
-                              i < review.rating ? "text-yellow-500 fill-current" : "text-gray-300"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <Badge variant="secondary" className="text-xs">
-                        {review.skill}
-                      </Badge>
-                    </div>
+                    <p className="font-medium">{String(review?.reviewer?.name)}</p>
                   </div>
-                  <span className="text-xs text-muted-foreground">{review.date}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {moment(review.created_at).fromNow()}
+                  </span>
                 </div>
                 <p className="text-sm text-muted-foreground">{review.comment}</p>
               </div>

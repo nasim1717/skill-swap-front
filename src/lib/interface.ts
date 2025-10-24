@@ -25,11 +25,12 @@ export interface UserProfile {
 
 export interface Review {
     id: string;
-    reviewerName: string;
+    reviewed_user_id: string;
+    reviewer_id: string;
     rating: number;
     comment: string;
-    date: string;
-    skill: string;
+    created_at: string;
+    reviewer: Record<string, unknown>;
 };
 
 export interface User {
