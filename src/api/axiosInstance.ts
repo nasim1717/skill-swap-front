@@ -1,13 +1,43 @@
 import axios from "axios";
 
+
 const axiosInstance = axios.create({
     baseURL: "http://localhost:5051/api",
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
     },
-
 });
+
+// Request interceptor to add auth token
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Response interceptor to handle errors
+axiosInstance.interceptors.response.use(
+    (response) => {
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Remove the token
+            localStorage.removeItem("accessToken");
+
+            // Redirect to login page
+            window.location.href = "/auth";
+        }
+        return Promise.reject(error);
+    }
+);
 
 export default axiosInstance;

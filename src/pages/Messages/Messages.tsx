@@ -14,6 +14,7 @@ const Messages = () => {
       timestamp: "2:30 PM",
       unreadCount: 2,
       isOnline: true,
+      connectionStatus: "pending",
     },
     {
       id: "2",
@@ -22,6 +23,7 @@ const Messages = () => {
       timestamp: "11:45 AM",
       unreadCount: 0,
       isOnline: false,
+      connectionStatus: "accepted",
     },
     {
       id: "3",
@@ -30,6 +32,7 @@ const Messages = () => {
       timestamp: "Yesterday",
       unreadCount: 1,
       isOnline: true,
+      connectionStatus: "accepted",
     },
   ];
 

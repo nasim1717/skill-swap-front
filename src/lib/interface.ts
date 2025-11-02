@@ -59,4 +59,5 @@ export interface Conversation {
     timestamp: string;
     unreadCount: number;
     isOnline: boolean;
+    connectionStatus: string;
 }

@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { getInitials } from "@/helper/helper";
 import { Message } from "@/lib/interface";
 import { cn } from "@/lib/utils";
-import { MessageSquare, MoreVertical, Send } from "lucide-react";
+import { Check, MessageSquare, MoreVertical, Send, X } from "lucide-react";
 import { useState } from "react";
 
 export default function ChatWindow({
@@ -81,37 +81,54 @@ export default function ChatWindow({
       {selectedConversationData ? (
         <>
           {/* Chat Header */}
-          <div className="p-4 border-b border-border bg-background-subtle flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileConversationOpen(false)}
-                className="md:hidden"
-              >
-                ←
-              </Button>
+          <div className="p-4 border-b border-border bg-background-subtle">
+            <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-3">
-                <div className="relative">
-                  <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
-                    {getInitials(selectedConversationData.userName)}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsMobileConversationOpen(false)}
+                  className="md:hidden"
+                >
+                  ←
+                </Button>
+                <div className="flex items-center space-x-3">
+                  <div className="relative">
+                    <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
+                      {getInitials(selectedConversationData.userName)}
+                    </div>
+                    {selectedConversationData.isOnline && (
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-background" />
+                    )}
                   </div>
-                  {selectedConversationData.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-success rounded-full border-2 border-background" />
-                  )}
-                </div>
-                <div>
-                  <p className="font-medium">{selectedConversationData.userName}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {selectedConversationData.isOnline ? "Online" : "Last seen recently"}
-                  </p>
+                  <div>
+                    <p className="font-medium">{selectedConversationData.userName}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {selectedConversationData.isOnline ? "Online" : "Last seen recently"}
+                    </p>
+                  </div>
                 </div>
               </div>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
             </div>
 
-            <Button variant="ghost" size="icon">
-              <MoreVertical className="w-4 h-4" />
-            </Button>
+            {/* Skills and Status */}
+            <div className="flex items-center justify-end">
+              {true && (
+                <div className="flex gap-2">
+                  <Button size="sm" variant="default">
+                    <Check className="w-4 h-4 mr-1" />
+                    Accept
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <X className="w-4 h-4 mr-1" />
+                    Decline
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Messages */}
