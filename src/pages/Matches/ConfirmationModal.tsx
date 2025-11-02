@@ -9,12 +9,30 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { getInitials } from "@/helper/helper";
+import { useMutation } from "@tanstack/react-query";
+import { connectRequest } from "@/services/matchesService";
+import { toast } from "sonner";
+import { Spinner } from "@/components/ui/spinner";
 export default function ConfirmationModal({
   showConfirmModal,
   setShowConfirmModal,
   selectedUser,
   confirmConnection,
 }) {
+  const { mutate: connectionRequest, isPending } = useMutation({
+    mutationFn: connectRequest,
+    onSuccess: (data) => {
+      confirmConnection();
+      toast.success("Connection request sent successfully");
+    },
+  });
+
+  const handleConnect = () => {
+    if (selectedUser) {
+      connectionRequest({ receiver_id: selectedUser.id });
+    }
+  };
+
   return (
     <Dialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
       <DialogContent className="sm:max-w-md">
@@ -68,7 +86,9 @@ export default function ConfirmationModal({
           <Button variant="outline" onClick={() => setShowConfirmModal(false)}>
             Cancel
           </Button>
-          <Button onClick={confirmConnection}>Send Connection Request</Button>
+          <Button onClick={handleConnect} disabled={isPending}>
+            Send Connection Request {isPending && <Spinner />}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -5,3 +5,9 @@ export const getMatches = async (searchTerm: string) => {
     const res = await axiosInstance.get(`/matches?search=${searchTerm}`);
     return res.data;
 };
+
+
+export const connectRequest = async (data: Record<string, unknown>) => {
+    const res = await axiosInstance.post("/requests/send", data);
+    return res.data;
+};
