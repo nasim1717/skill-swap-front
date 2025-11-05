@@ -1,4 +1,3 @@
-// components/ConversationSidebar.tsx
 import { Input } from "@/components/ui/input";
 import { getInitials } from "@/helper/helper";
 import { cn } from "@/lib/utils";
@@ -6,7 +5,6 @@ import { CheckCircle2, Clock, MessageSquare, Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
-import { formatDistanceToNow } from "date-fns";
 import moment from "moment";
 
 interface ConversationSidebarProps {
@@ -35,14 +33,6 @@ export default function ConversationSidebar({
     conversationsList?.data?.filter((conv: any) =>
       conv.user.name.toLowerCase().includes(searchQuery.toLowerCase())
     ) || [];
-
-  const formatTimestamp = (timestamp: string) => {
-    try {
-      return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
-    } catch {
-      return timestamp;
-    }
-  };
 
   const getLastMessageText = (conversation: any) => {
     if (conversation.last_message?.message) {

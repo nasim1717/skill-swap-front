@@ -1,4 +1,3 @@
-// components/Messages.tsx
 import { useState, useEffect } from "react";
 import ConversationSidebar from "./ConversationSidebar";
 import ChatWindow from "./ChatWindow";

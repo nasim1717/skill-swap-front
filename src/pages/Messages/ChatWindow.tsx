@@ -1,4 +1,3 @@
-// components/ChatWindow.tsx
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getInitials } from "@/helper/helper";
@@ -9,7 +8,7 @@ import { Check, MessageSquare, MoreVertical, Send, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Socket } from "socket.io-client";
-import { formatDistanceToNow, format } from "date-fns";
+import { format } from "date-fns";
 import { useAuthContext } from "@/hooks/useAuthContext";
 
 interface ChatWindowProps {
