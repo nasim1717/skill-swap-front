@@ -8,6 +8,6 @@ export const getMatches = async (searchTerm: string) => {
 
 
 export const connectRequest = async (data: Record<string, unknown>) => {
-    const res = await axiosInstance.post("/requests/send", data);
+    const res = await axiosInstance.post("/chat-requests", data);
     return res.data;
 };

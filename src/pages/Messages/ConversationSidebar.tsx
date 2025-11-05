@@ -1,17 +1,57 @@
+// components/ConversationSidebar.tsx
 import { Input } from "@/components/ui/input";
 import { getInitials } from "@/helper/helper";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, Clock, MessageSquare, Search } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { formatDistanceToNow } from "date-fns";
+
+interface ConversationSidebarProps {
+  isMobileConversationOpen: boolean;
+  setIsMobileConversationOpen: (open: boolean) => void;
+  selectedConversation: any;
+  setSelectedConversation: (conv: any) => void;
+  conversationsList: any;
+  status: string;
+  setStatus: (status: string) => void;
+}
+
 export default function ConversationSidebar({
   isMobileConversationOpen,
   setIsMobileConversationOpen,
   selectedConversation,
   setSelectedConversation,
-  conversations,
-}) {
-  const filterTab = "pending";
+  conversationsList,
+  status,
+  setStatus,
+}: ConversationSidebarProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter conversations based on search
+  const filteredConversations =
+    conversationsList?.data?.filter((conv: any) =>
+      conv.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || [];
+
+  const formatTimestamp = (timestamp: string) => {
+    try {
+      return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
+    } catch {
+      return timestamp;
+    }
+  };
+
+  const getLastMessageText = (conversation: any) => {
+    if (conversation.last_message?.message) {
+      const isOwn = conversation.last_message.is_own;
+      const prefix = isOwn ? "You: " : "";
+      return prefix + conversation.last_message.message;
+    }
+    return conversation.message || "No messages yet";
+  };
+
   return (
     <div
       className={cn(
@@ -22,7 +62,7 @@ export default function ConversationSidebar({
       <div className="p-4 border-b border-border">
         <h2 className="text-lg font-semibold mb-4">Messages</h2>
 
-        <Tabs onValueChange={(v) => ""} className="mb-4">
+        <Tabs value={status} onValueChange={setStatus} className="mb-4">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="active">Active</TabsTrigger>
@@ -32,73 +72,107 @@ export default function ConversationSidebar({
 
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input placeholder="Search conversations..." className="pl-10" />
+          <Input
+            placeholder="Search conversations..."
+            className="pl-10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       </div>
 
-      <div className="overflow-y-auto">
-        {conversations.length === 0 ? (
+      <div className="overflow-y-auto h-[calc(100vh-16rem)]">
+        {filteredConversations.length === 0 ? (
           <div className="p-8 text-center">
             <MessageSquare className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
             <p className="text-muted-foreground text-sm">
-              {filterTab === "pending"
+              {searchQuery
+                ? "No conversations found"
+                : status === "pending"
                 ? "No pending connection requests"
-                : filterTab === "active"
+                : status === "active"
                 ? "No active conversations yet"
                 : "No conversations yet"}
             </p>
           </div>
         ) : (
-          conversations.map((conversation) => (
+          filteredConversations.map((conversation: any) => (
             <div
               key={conversation.id}
               onClick={() => {
-                setSelectedConversation(conversation.id);
+                setSelectedConversation({
+                  requestId: conversation.id,
+                  user: conversation.user,
+                  status: conversation.status,
+                  thread_id: conversation.thread_id,
+                  is_online: conversation.is_online,
+                });
                 setIsMobileConversationOpen(true);
               }}
               className={cn(
-                "p-4 border-b border-border cursor-pointer transition-all duration-smooth hover:bg-card-hover",
-                selectedConversation === conversation.id && "bg-card border-r-2 border-r-primary"
+                "p-4 border-b border-border cursor-pointer transition-all duration-200 hover:bg-card-hover",
+                selectedConversation?.requestId === conversation.id &&
+                  "bg-card border-r-2 border-r-primary"
               )}
             >
-              <div className="flex items-center space-x-3">
-                <div className="relative">
+              <div className="flex items-start space-x-3">
+                <div className="relative flex-shrink-0">
                   <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center text-white font-semibold">
-                    {getInitials(conversation.userName)}
+                    {conversation.user.profile_picture ? (
+                      <img
+                        src={conversation.user.profile_picture}
+                        alt={conversation.user.name}
+                        className="w-full h-full rounded-full object-cover"
+                      />
+                    ) : (
+                      getInitials(conversation.user.name)
+                    )}
                   </div>
-                  {conversation.isOnline && (
-                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-success rounded-full border-2 border-background" />
+                  {/* Online indicator - now with better visibility */}
+                  {conversation.is_online && (
+                    <div
+                      className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background"
+                      title="Online"
+                    />
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-2">
-                      <p className="font-medium truncate">{conversation.userName}</p>
-                      {conversation.connectionStatus === "pending" && (
+                      <p className="font-medium truncate">{conversation.user.name}</p>
+                      {conversation.status === "PENDING" && (
                         <Badge variant="secondary" className="text-xs">
                           <Clock className="w-3 h-3 mr-1" />
                           Pending
                         </Badge>
                       )}
-                      {conversation.connectionStatus === "accepted" && (
-                        <CheckCircle2 className="w-4 h-4 text-success" />
+                      {conversation.status === "ACCEPTED" && (
+                        <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
                       )}
                     </div>
-                    <span className="text-xs text-muted-foreground">{conversation.timestamp}</span>
                   </div>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {conversation.lastMessage}
-                  </p>
-                </div>
 
-                {conversation.unreadCount > 0 && (
-                  <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-xs text-white font-medium">
-                      {conversation.unreadCount}
-                    </span>
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm text-muted-foreground truncate flex-1">
+                      {getLastMessageText(conversation)}
+                    </p>
+
+                    {conversation.unread_count > 0 && (
+                      <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-xs text-white font-medium">
+                          {conversation.unread_count > 9 ? "9+" : conversation.unread_count}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  {conversation.last_message?.created_at && (
+                    <span className="text-xs text-muted-foreground mt-1 block">
+                      {formatTimestamp(conversation.last_message.created_at)}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           ))

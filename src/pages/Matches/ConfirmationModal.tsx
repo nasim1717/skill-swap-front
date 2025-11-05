@@ -19,11 +19,15 @@ export default function ConfirmationModal({
   selectedUser,
   confirmConnection,
 }) {
-  const { mutate: connectionRequest, isPending } = useMutation({
+  const { mutate: connectionRequest, isPending } = useMutation<any, any, any>({
     mutationFn: connectRequest,
     onSuccess: (data) => {
       confirmConnection();
       toast.success("Connection request sent successfully");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response.data.error.message || "Error sending connection request");
     },
   });
 
