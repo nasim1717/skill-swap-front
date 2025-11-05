@@ -8,7 +8,7 @@ import { getInitials } from "@/helper/helper";
 import { useAuthContext } from "@/hooks/useAuthContext";
 
 export default function ProfileAvatar({ profileData }) {
-  const { user } = useAuthContext();
+  const { user, setUser } = useAuthContext();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState<string | null>(profileData?.data?.profile_picture || null);
 
@@ -22,6 +22,10 @@ export default function ProfileAvatar({ profileData }) {
     },
     onSuccess: (data) => {
       setPreview(data.url);
+      setUser((prevUser) => ({
+        ...prevUser,
+        profile_picture: data.url,
+      }));
       //   onUploadSuccess?.(data.url);
     },
   });

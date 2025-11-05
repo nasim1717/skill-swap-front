@@ -416,7 +416,7 @@ export default function ChatWindow({
                   <Check className="w-4 h-4 mr-1" />
                   {isAcceptingRequest ? "Accepting..." : "Accept"}
                 </Button>
-                <Button
+                {/* <Button
                   onClick={() => handleDeclineRequest(selectedConversation.requestId)}
                   size="sm"
                   variant="outline"
@@ -424,7 +424,7 @@ export default function ChatWindow({
                 >
                   <X className="w-4 h-4 mr-1" />
                   {isDecliningRequest ? "Declining..." : "Decline"}
-                </Button>
+                </Button> */}
               </div>
             )}
           </div>

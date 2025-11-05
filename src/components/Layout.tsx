@@ -1,20 +1,10 @@
 import { useState } from "react";
 import { Outlet, useLocation, Link, useNavigate } from "react-router-dom";
-import {
-  Menu,
-  X,
-  Home,
-  User,
-  Users,
-  MessageSquare,
-  Settings,
-  Moon,
-  Sun,
-  LogOut,
-} from "lucide-react";
+import { Menu, X, Home, User, Users, MessageSquare, Moon, Sun, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 const Layout = () => {
   const { user } = useAuthContext();
@@ -36,7 +26,8 @@ const Layout = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
     navigate("/auth");
   };
 
@@ -88,10 +79,19 @@ const Layout = () => {
             <div className="flex items-center space-x-3 mb-3">
               <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center">
                 <User className="w-5 h-5 text-white" />
+                {user?.profile_picture && (
+                  <Avatar>
+                    <AvatarImage
+                      src={user?.profile_picture}
+                      alt="Profile"
+                      className="object-cover"
+                    />
+                  </Avatar>
+                )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-sidebar-foreground truncate">John Doe</p>
-                <p className="text-xs text-sidebar-foreground/60 truncate">john@example.com</p>
+                <p className="text-sm font-medium text-sidebar-foreground truncate">{user?.name}</p>
+                <p className="text-xs text-sidebar-foreground/60 truncate">{user?.email}</p>
               </div>
             </div>
             <Button

@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import moment from "moment";
 
 interface ConversationSidebarProps {
   isMobileConversationOpen: boolean;
@@ -169,7 +170,7 @@ export default function ConversationSidebar({
 
                   {conversation.last_message?.created_at && (
                     <span className="text-xs text-muted-foreground mt-1 block">
-                      {formatTimestamp(conversation.last_message.created_at)}
+                      {moment(conversation.last_message.created_at).fromNow()}
                     </span>
                   )}
                 </div>

@@ -135,7 +135,7 @@ const Dashboard = () => {
       />
 
       {/* Recent Activity */}
-      <RecentActivity />
+      {/* <RecentActivity /> */}
     </div>
   );
 };

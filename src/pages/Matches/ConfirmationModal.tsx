@@ -36,7 +36,6 @@ export default function ConfirmationModal({
       connectionRequest({ receiver_id: selectedUser.id });
     }
   };
-
   return (
     <Dialog open={showConfirmModal} onOpenChange={setShowConfirmModal}>
       <DialogContent className="sm:max-w-md">
@@ -71,15 +70,15 @@ export default function ConfirmationModal({
               <div>
                 <p className="font-medium text-success">Can teach:</p>
                 <p className="text-muted-foreground">
-                  {selectedUser?.offerd_skills?.split(",").slice(0, 2).join(", ")}
-                  {selectedUser?.offerd_skills?.split(",").length > 2 && "..."}
+                  {selectedUser?.skills_offered?.split(",").slice(0, 2).join(", ")}
+                  {selectedUser?.skills_offered?.split(",").length > 2 && "..."}
                 </p>
               </div>
               <div>
                 <p className="font-medium text-primary">Wants to learn:</p>
                 <p className="text-muted-foreground">
-                  {selectedUser?.wanted_skills?.split(",").slice(0, 2).join(", ")}
-                  {selectedUser?.wanted_skills?.split(",").length > 2 && "..."}
+                  {selectedUser?.skills_wanted?.split(",").slice(0, 2).join(", ")}
+                  {selectedUser?.skills_wanted?.split(",").length > 2 && "..."}
                 </p>
               </div>
             </div>
