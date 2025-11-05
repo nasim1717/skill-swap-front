@@ -152,6 +152,11 @@ export default function ConversationSidebar({
                         <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
                       )}
                     </div>
+                    {conversation.last_message?.created_at && (
+                      <span className="text-xs text-muted-foreground mt-1 block">
+                        {moment(conversation.last_message.created_at).fromNow()}
+                      </span>
+                    )}
                   </div>
 
                   <div className="flex items-center justify-between gap-2">
@@ -167,12 +172,6 @@ export default function ConversationSidebar({
                       </div>
                     )}
                   </div>
-
-                  {conversation.last_message?.created_at && (
-                    <span className="text-xs text-muted-foreground mt-1 block">
-                      {moment(conversation.last_message.created_at).fromNow()}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
