@@ -430,7 +430,7 @@ export default function ChatWindow({
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {isLoadingMessages ? (
+            {isLoadingMessages && selectedConversation?.status !== "PENDING" ? (
               <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                   <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
