@@ -12,9 +12,16 @@ import {
 } from "@/services/skillService";
 import { toast } from "sonner";
 import { useConfirmDialog } from "@/provider/ConfirmDialogProvider";
+import { getMatches } from "@/services/matchesService";
 
 const Dashboard = () => {
   const { confirm } = useConfirmDialog();
+  // matches api call
+  const { data: matchesData, refetch: matchesRefetch } = useQuery({
+    queryKey: ["matches"],
+    queryFn: () => getMatches(),
+  });
+
   // offer skill query
   const {
     data: offeredSkills,
@@ -30,6 +37,7 @@ const Dashboard = () => {
     mutationFn: createSkillOfferd,
     onSuccess: () => {
       skillOfferdRefetch();
+      matchesRefetch();
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -51,6 +59,7 @@ const Dashboard = () => {
     mutationFn: createSkillWantted,
     onSuccess: () => {
       skillWantedRefetch();
+      matchesRefetch();
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -111,6 +120,7 @@ const Dashboard = () => {
       <QuickStates
         offeredSkills={offeredSkills?.data?.skills}
         wantedSkills={wantedSkills?.data?.skills}
+        matches={matchesData?.data?.matched_users ?? []}
       />
 
       {/* Quick Actions */}

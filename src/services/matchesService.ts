@@ -1,8 +1,8 @@
 import axiosInstance from "@/api/axiosInstance";
 
-export const getMatches = async (searchTerm: string) => {
+export const getMatches = async (searchTerm?: string) => {
     const urlCreate = searchTerm ? `/matches?search=${searchTerm}` : `/matches`;
-    const res = await axiosInstance.get(`/matches?search=${searchTerm}`);
+    const res = await axiosInstance.get(urlCreate);
     return res.data;
 };
 

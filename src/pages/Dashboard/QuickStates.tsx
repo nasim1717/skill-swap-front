@@ -1,7 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getMatches } from "@/services/matchesService";
+import { useQuery } from "@tanstack/react-query";
 import { BookOpen, MessageSquare, TrendingUp, Users } from "lucide-react";
 
-export default function QuickStates({ offeredSkills, wantedSkills }) {
+export default function QuickStates({ offeredSkills, wantedSkills, matches }) {
   const stats = [
     {
       title: "Skills Offered",
@@ -23,23 +25,15 @@ export default function QuickStates({ offeredSkills, wantedSkills }) {
     },
     {
       title: "Active Matches",
-      value: "12",
+      value: matches?.length ?? 0,
       description: "Current learning partnerships",
       icon: Users,
       color: "text-accent",
       bgColor: "bg-accent/10",
       borderColor: "border-accent/20",
     },
-    {
-      title: "Messages",
-      value: "23",
-      description: "Unread conversations",
-      icon: MessageSquare,
-      color: "text-foreground",
-      bgColor: "bg-muted",
-      borderColor: "border-border",
-    },
   ];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat) => {
