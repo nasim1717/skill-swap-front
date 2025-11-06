@@ -17,7 +17,7 @@ export default function MatchUserCard({ matchesData, handleConnect }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {matchesData?.data?.matched_users?.map((user: any) => (
-        <Link to={`/profile/${user?.id}`}>
+        <Link to={`/dashboard/profile/${user?.id}`}>
           <Card
             key={user.id}
             className="shadow-md border-0 bg-card/80 backdrop-blur-sm hover:shadow-lg transition-all duration-smooth hover:scale-105"

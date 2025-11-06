@@ -31,9 +31,26 @@ const Layout = () => {
     navigate("/auth");
   };
 
+  console.log(location.pathname);
+
   const isActive = (path: string) => {
-    if (path === "/" && location.pathname === "/") return true;
-    if (path !== "/" && location.pathname.startsWith(path)) return true;
+    if (location.pathname === path) return true;
+
+    if (
+      path.startsWith("/dashboard/profile") &&
+      location.pathname.startsWith("/dashboard/profile")
+    ) {
+      return true;
+    }
+
+    if (path === "/dashboard/matches" && location.pathname.startsWith("/dashboard/matches")) {
+      return true;
+    }
+
+    if (path === "/dashboard/messages" && location.pathname.startsWith("/dashboard/messages")) {
+      return true;
+    }
+
     return false;
   };
 
