@@ -14,10 +14,10 @@ const Layout = () => {
   const navigate = useNavigate();
 
   const navigation = [
-    { name: "Dashboard", href: "/", icon: Home },
-    { name: "Profile", href: `/profile/${user?.id}`, icon: User },
-    { name: "Matches", href: "/matches", icon: Users },
-    { name: "Messages", href: "/messages", icon: MessageSquare },
+    { name: "Dashboard", href: "/dashboard", icon: Home },
+    { name: "Profile", href: `/dashboard/profile/${user?.id}`, icon: User },
+    { name: "Matches", href: "/dashboard/matches", icon: Users },
+    { name: "Messages", href: "/dashboard/messages", icon: MessageSquare },
   ];
 
   const toggleDarkMode = () => {
@@ -47,6 +47,7 @@ const Layout = () => {
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
                 <Users className="w-5 h-5 text-white" />
+                {/* <img src={Logo} className=" " /> */}
               </div>
               <span className="text-xl font-semibold text-sidebar-foreground">SkillSwap</span>
             </div>

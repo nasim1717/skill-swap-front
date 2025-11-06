@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,7 @@ import { useMutation } from "@tanstack/react-query";
 import { loginUser, registerUser } from "@/services/authService";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AuthForm = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const AuthForm = () => {
       toast.success("User registered successfully");
       setUser(data.data.user);
       setAccsessToken(data.data.access_token);
-      navigate("/");
+      navigate("/dashboard");
     },
     onError: (registerError: any) => {
       const errorMessagr = registerError?.response?.data?.errors;
@@ -40,7 +40,7 @@ const AuthForm = () => {
       toast.success("User logged in successfully");
       setUser(data.data.user);
       setAccsessToken(data.data.access_token);
-      navigate("/");
+      navigate("/dashboard");
     },
     onError: (registerError: any) => {
       const errorMessagr = registerError?.response?.data?.errors;
@@ -98,9 +98,12 @@ const AuthForm = () => {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-12">
         <Card className="w-full max-w-md shadow-lg border-0 bg-card/80 backdrop-blur-sm">
           <CardHeader className="space-y-1 text-center">
-            <div className="w-20 h-12  rounded-full flex items-center justify-center mx-auto mb-4">
-              <img src={Logo} className=" " />
-            </div>
+            <Link to={"/"}>
+              <div className="w-20 h-12  rounded-full flex items-center justify-center mx-auto mb-4">
+                <img src={Logo} className=" " />
+              </div>
+            </Link>
+
             <CardTitle className="text-2xl font-bold">
               {isLogin ? "Welcome back" : "Create account"}
             </CardTitle>

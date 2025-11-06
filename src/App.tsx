@@ -27,13 +27,13 @@ const App = () => (
           <BrowserRouter>
             <Routes>
               <Route path="/auth" element={<Auth />} />
-              <Route path="/home" element={<Home />} />
+              <Route path="/" element={<Home />} />
               <Route element={<PrivateRoute />}>
-                <Route path="/" element={<Layout />}>
+                <Route path="/dashboard" element={<Layout />}>
                   <Route index element={<Dashboard />} />
-                  <Route path="profile/:id" element={<Profile />} />
-                  <Route path="matches" element={<Matches />} />
-                  <Route path="messages" element={<Messages />} />
+                  <Route path="/dashboard/profile/:id" element={<Profile />} />
+                  <Route path="/dashboard/matches" element={<Matches />} />
+                  <Route path="/dashboard/messages" element={<Messages />} />
                 </Route>
               </Route>
 

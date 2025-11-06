@@ -16,7 +16,7 @@ const Home = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <HeroSection />
-      <StatesSection />
+      {/* <StatesSection /> */}
       <FeaturesSection />
       <HowItWorks />
       <CtaSection />

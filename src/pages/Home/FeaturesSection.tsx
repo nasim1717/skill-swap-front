@@ -14,12 +14,6 @@ export default function FeaturesSection() {
         "Communicate instantly with your skill swap partners through our integrated messaging system.",
     },
     {
-      icon: Trophy,
-      title: "Track Progress",
-      description:
-        "Monitor your learning journey and celebrate achievements with our progress tracking.",
-    },
-    {
       icon: Star,
       title: "Rate & Review",
       description: "Build trust in the community through transparent ratings and reviews system.",
@@ -36,20 +30,22 @@ export default function FeaturesSection() {
             Our platform makes skill sharing simple, effective, and rewarding for everyone involved.
           </p>
         </div>
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {features.map((feature, index) => (
-            <Card key={index} className="text-center">
-              <CardHeader>
-                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                  <feature.icon className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle className="text-xl">{feature.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-center">{feature.description}</CardDescription>
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex justify-center">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {features.map((feature, index) => (
+              <Card key={index} className="text-center">
+                <CardHeader>
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+                    <feature.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle className="text-xl">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-center">{feature.description}</CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     </section>
