@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5051/api",
+    baseURL: "http://nasimapi.click/api",
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
