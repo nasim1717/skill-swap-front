@@ -4,7 +4,7 @@ import { io, Socket } from 'socket.io-client';
 import { useAuthContext } from './useAuthContext';
 // Adjust import based on your auth setup
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5051';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL;
 
 export const useSocket = () => {
     const socketRef = useRef<Socket | null>(null);
