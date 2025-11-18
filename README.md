@@ -1,115 +1,421 @@
-# Skill Swap Platform
+# SkillSwap Platform - Features Documentation
+
+## 📋 Table of Contents
+
+- [Overview](#overview)
+- [Technology Stack](#technology-stack)
+- [Database Architecture](#database-architecture)
+- [Features & Pages](#features--pages)
+  - [Landing Page](#landing-page)
+  - [Authentication](#authentication)
+  - [Dashboard](#dashboard)
+  - [Matches](#matches)
+  - [Messages](#messages)
+  - [Profile](#profile)
+- [Key Features](#key-features)
+
+---
 
 ## Overview
 
-Skill Swap Platform is a full-stack web application designed to connect users who want to exchange skills with one another. Users can list the skills they can offer and the skills they want to learn, get matched with others based on complementary skills, and communicate via a real-time chat system. The platform is built using **Laravel** for the backend, **React** (with Inertia.js) or **Next.js** for the frontend, and **MySQL** for the database, ensuring a robust and scalable solution. The UI is designed with **TailwindCSS** and **shadcn/ui** for a modern, responsive experience, incorporating **lucide-react** icons for enhanced aesthetics.
+SkillSwap is a platform that connects people who want to exchange skills. Users can offer skills they're proficient in and request skills they want to learn, then get matched with compatible partners for mutual learning.
 
-This project showcases full-stack development skills, including authentication, database management, real-time features, and responsive UI design, making it an ideal portfolio piece for demonstrating proficiency in modern web development technologies.
+### Core Concept
 
-## Features
+- **Teach what you know** - Share your expertise with others
+- **Learn what you want** - Connect with people who can teach you
+- **Fair exchange** - Everyone teaches and everyone learns
 
-The platform includes the following features, each designed to provide a seamless user experience and demonstrate technical expertise:
+---
 
-### 1. User Registration and Login
+## Technology Stack
 
-- **Description**: Users can create an account and log in securely to access the platform.
-- **Details**:
-  - Secure authentication using **Laravel Breeze** or **Sanctum**.
-  - Registration form includes fields for name, email, password, and confirm password.
-  - Login form requires email and password with validation for incorrect credentials.
-  - Responsive UI with a centered card layout, styled using **TailwindCSS** and **shadcn/ui**.
-  - Incorporates **lucide-react** icons (e.g., `User`, `Lock`, `Mail`) for a polished look.
-  - Supports dark and light modes for accessibility.
-- **Technical Highlights**:
-  - Backend: Laravel authentication with session or token-based API.
-  - Frontend: React/Next.js form components with client-side validation.
-  - Error handling for invalid inputs with user-friendly messages.
+### Frontend
 
-### 2. Skill Listing
+- **React 18** - Modern UI library
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool
+- **Tailwind CSS** - Utility-first styling
+- **shadcn/ui** - Beautiful, accessible components
+- **React Router** - Client-side routing
+- **Lucide React** - Icon library
 
-- **Description**: Users can list the skills they can offer and the skills they want to learn.
-- **Details**:
-  - Two sections: "Skills I can offer" (e.g., Laravel, Photoshop) and "Skills I want to learn" (e.g., UI/UX Design, English).
-  - Users add skills via a form, which are displayed as removable tags.
-  - Skills are categorized (e.g., Programming, Design) for better organization.
-  - Responsive design: Stacks vertically on mobile, side-by-side on desktop.
-  - Styled with **TailwindCSS**, **shadcn/ui**, and **lucide-react** icons (e.g., `PlusCircle`, `Edit`).
-- **Technical Highlights**:
-  - Backend: Eloquent ORM for managing skills and user-skill relationships.
-  - Frontend: React/Next.js components for dynamic skill input and tag display.
-  - Database: Many-to-many relationship between `users` and `skills` via `user_skills` pivot table.
+### Backend
 
-### 3. Matching System
+- **Node.js** - Server runtime environment
+- **Express.js** - Web application framework
+- **MySQL** - Primary database
+- **Authentication** - JWT-based authentication
 
-- **Description**: Automatically matches users based on complementary skills (e.g., a user offering coding is matched with someone wanting to learn coding).
-- **Details**:
-  - Displays matched users in a grid or list with profile cards showing name, profile picture, offered skills, and desired skills.
-  - Includes a "Connect" button to initiate contact.
-  - Filterable search by skill name or category.
-  - Modal popup for confirming matches with "Confirm" and "Cancel" options.
-  - Responsive design with **TailwindCSS** and **lucide-react** icons (e.g., `Users`, `CheckCircle`).
-- **Technical Highlights**:
-  - Backend: Laravel query logic to match users based on `user_skills` table.
-  - Frontend: React/Next.js components for rendering matches and modals.
-  - Database: `matches` table to store match status (pending, accepted, rejected).
+---
 
-### 4. Messaging System
+## Database Architecture
 
-- **Description**: Enables real-time communication between matched users.
-- **Details**:
-  - A collapsible sidebar (hamburger menu on mobile) lists conversations with user names and message previews.
-  - Main chat window displays messages in speech bubbles (left for others, right for the user).
-  - Text input field with a "Send" button for composing messages.
-  - Real-time updates using **Laravel Broadcasting** with **Pusher**.
-  - Styled with **TailwindCSS**, **shadcn/ui**, and **lucide-react** icons (e.g., `MessageSquare`, `Send`).
-- **Technical Highlights**:
-  - Backend: Laravel WebSockets or Pusher for real-time messaging.
-  - Frontend: React/Next.js for dynamic chat interface with real-time updates.
-  - Database: `messages` table to store sender, receiver, and message content.
+The platform uses a comprehensive relational database schema with the following core tables:
 
-### 5. Profile Management
+### Database ER Diagram
 
-- **Description**: Allows users to manage their profiles and view ratings/reviews.
-- **Details**:
-  - Profile card displays name, profile picture, bio, and listed skills (offered and desired).
-  - Users can upload a profile picture and edit their bio.
-  - Rating system with 5-star clickable icons for reviewing others’ skills.
-  - Review section shows comments and ratings from other users.
-  - Responsive design with **TailwindCSS**, **shadcn/ui**, and **lucide-react** icons (e.g., `User`, `Star`, `Edit`).
-- **Technical Highlights**:
-  - Backend: Laravel API for profile updates and review management.
-  - Frontend: React/Next.js components for profile editing and review display.
-  - Database: `reviews` table for storing ratings and comments.
+![Database ER Diagram](./image/er-diagram.png)
+_Complete entity relationship diagram showing all tables and their relationships_
 
-### 6. Responsive UI
+### Core Tables
 
-- **Description**: Provides a modern, mobile-friendly user interface across all features.
-- **Details**:
-  - Navigation bar with links to Home, Profile, Matches, and Messages (collapsible hamburger menu on mobile).
-  - Dashboard with a welcome message, quick stats (e.g., number of skills, matches), and a call-to-action to add skills.
-  - Consistent design with **TailwindCSS** and **shadcn/ui** for a clean, professional look.
-  - Uses **lucide-react** icons (e.g., `Home`, `User`, `MessageSquare`) for navigation and actions.
-  - Supports dark and light modes with smooth transitions.
-  - Responsive layouts: Vertical stacking on mobile, grid or sidebar layouts on desktop.
-- **Technical Highlights**:
-  - Frontend: React/Next.js with TailwindCSS for responsive design.
-  - Dark mode implemented using TailwindCSS’s dark mode classes.
-  - Optimized for performance with lazy loading and efficient state management.
+### Users & Profiles
 
-## Tech Stack
+- **users** – Stores user account and profile information (name, email, password, bio, location, avatar, timestamps)
 
-- **Backend**: Laravel (PHP) with Eloquent ORM and Sanctum/Breeze for authentication.
-- **Frontend**: React with Inertia.js or Next.js for dynamic, SEO-friendly interfaces.
-- **Database**: MySQL for relational data storage.
-- **Styling**: TailwindCSS and shadcn/ui for responsive, modern UI.
-- **Icons**: lucide-react for consistent iconography.
-- **Real-time Features**: Laravel Broadcasting with Pusher for real-time messaging.
-- **Deployment**: Vercel (frontend), Heroku/Railway (backend), ClearDB/PlanetScale (database).
+---
 
-## Setup Instructions
+### Skills Management
 
-1. **Clone the Repository**:
-   ```bash
-   git clone <repository-url>
-   cd skill-swap-platform
-   ```
+- **skills_offered** – Skills that a user can teach or offer
+- **skills_wanted** – Skills that a user wants to learn
+
+---
+
+### Matching & Communication
+
+- **chat_requests** – Handles permission-based chat requests (pending / accepted)
+- **chat_threads** – Represents a conversation channel between two users
+- **messages** – Actual chat messages sent between users within a thread
+
+---
+
+### Reviews & Feedback
+
+- **reviews** – Stores ratings and written feedback from one user to another
+
+---
+
+## Features & Pages
+
+### Landing Page
+
+![Landing Page](./image/home.png)
+_Modern hero section with call-to-action_
+
+**Features:**
+
+- **Hero Section** – Strong value proposition with “Exchange Skills, Build Communities” messaging
+- **Platform Benefits** – Highlights perfect matches, real-time chat, and review system
+- **Clear CTAs** – Buttons to start swapping skills or learn more
+- **How It Works Section** – Three-step explanation: create profile → find match → start learning
+- **Responsive Design** – Fully optimized layout for desktop, tablet, and mobile devices
+- **Visual Enhancements** – Gradient highlights, icons, clean typography, and smooth layout structure
+
+**User Actions:**
+
+- **Sign Up** – Create a new account to begin offering or learning skills
+- **Login** – Access profile, chat, skills, and personal dashboard
+- **Learn More** – Read details about features and how the platform works
+- **Start Swapping Skills** – Begin the skill exchange journey directly from the hero section
+
+---
+
+### Authentication
+
+![Auth Page](./image/auth.png)
+_Secure login and registration interface_
+
+**Features:**
+
+- Unified authentication form
+- Toggle between login and signup modes
+- Email and password authentication
+- Form validation with error messages
+- Secure password handling
+
+**User Actions:**
+
+- Create new account
+- Login to existing account
+
+---
+
+### Dashboard
+
+![Dashboard](./image/dashboard.png)
+_Personalized user dashboard with key metrics_
+
+**Features:**
+
+- Overview of user statistics
+- Skill offerings and wanted display
+- Active matches display
+- Add/edit/remove offered skills
+- Add/edit/remove wanted skills
+
+**User Actions:**
+
+- Navigate to matches
+- View active matches
+- Navigate to messages
+- Manage skills
+- Quick skill swap initiation
+
+---
+
+### Matches
+
+![Matches Page](./image/matches.png)
+_Smart matching algorithm connects compatible users_
+
+**Features:**
+
+- **Smart Search**
+
+  - skills offered, or skills wanted
+  - Real-time filtering
+  - Fuzzy matching
+
+- **Match Cards**
+
+  - User avatar (with initials fallback)
+  - Star rating display
+  - Location information
+  - Match score (0-100%)
+  - Color-coded match quality
+  - Skills offered (can teach)
+  - Skills wanted (wants to learn)
+  - Quick connect button
+
+<!-- - **Pagination System**
+
+  - 6 users per page
+  - Smart page number display with ellipsis
+  - Previous/Next navigation
+  - Direct page number selection
+  - Shows "X-Y of Z matches"
+  - Resets to page 1 on new search -->
+
+- **Empty States**
+
+  - No matches found message
+  - Clear search button
+  - Helpful suggestions
+
+- **Connection Modal**
+  - Confirmation dialog before connecting
+  - User summary preview
+  - Cancel or confirm actions
+
+**Match Score Algorithm:**
+
+- 90-100%: Excellent match (green badge)
+- 80-89%: Good match (primary color)
+- 70-79%: Fair match (amber)
+- Below 70%: Low match (muted)
+
+**User Actions:**
+
+- Search for compatible users
+- Browse paginated results
+- View detailed user profiles
+- Send connection requests
+- Filter by various criteria
+
+---
+
+### Messages
+
+![Messages Page](./image/messages.png)
+_Real-time messaging with connection management_
+
+**Features:**
+
+- **Conversation List**
+
+  - All conversations organized by status
+  - Connection status badges (Pending, Active)
+  - Last message preview
+  - Timestamp display
+  - Unread indicators
+
+- **Tabbed Interface**
+
+  - **All** - View all conversations
+  - **Active** - Only accepted connections
+  - **Pending** - Incoming requests
+
+- **Chat Interface**
+
+  - Real-time message display
+  - Message timestamps
+  - Sender/receiver differentiation
+  - Auto-scroll to latest
+  - Message status indicators
+
+- **Connection Request Actions**
+
+  - Accept buttons for pending requests
+  - Disabled input until connection accepted
+  - Clear status indicators in header
+  - Toast notifications for actions
+
+- **Search & Filter**
+  - Search conversations
+  - Filter by connection status
+  - Sort by recent activity
+
+**User Actions:**
+
+- Accept connection requests
+- Send and receive messages
+- Switch between conversation tabs
+- Search conversations
+- View conversation history
+
+---
+
+### Profile
+
+![Profile Page](./image/profile.png)
+_Comprehensive user profile management_
+
+**Features:**
+
+- **Personal Information**
+
+  - Avatar upload/management
+  - Full name
+  - Bio/description
+  - Location
+
+- **Statistics Display**
+
+  - Skills taught
+  - Skills learned
+  - Overall rating
+
+- **Reviews Section**
+  - Received reviews and ratings
+  - Average star rating
+  - Feedback from other users
+  - Review timestamps
+
+**User Actions:**
+
+- Update profile information
+- Upload profile picture
+- Edit personal details
+
+---
+
+## Key Features
+
+### 🎯 Smart Matching Algorithm
+
+- Analyzes offered and wanted skills
+- Calculates compatibility scores (0-100%)
+- Considers location proximity
+- Factors in user ratings
+- Prioritizes mutual benefit matches
+
+### 💬 Real-time Messaging
+
+- Instant message delivery
+- Read receipts
+- Message status tracking
+- Connection-based conversations
+- Organized by status (Active/Pending)
+
+### 🔐 Secure Authentication
+
+- Email and password login
+- Session management
+- Email verification
+- Secure token handling
+- Protected routes
+
+### ⭐ Rating & Review System
+
+- 5-star rating scale
+- Written feedback
+- Match-based reviews
+- Public rating display
+- Quality assurance
+
+### 📱 Responsive Design
+
+- Mobile-first approach
+- Tablet optimization
+- Desktop layouts
+- Touch-friendly interfaces
+- Adaptive navigation
+
+### 🎨 Modern UI/UX
+
+- Clean, intuitive interface
+- Consistent design system
+- Beautiful animations
+- Loading states
+- Empty state handling
+- Toast notifications
+
+### 🔍 Advanced Search & Filtering
+
+- Real-time search
+- Multiple filter criteria
+- Sort options
+- Clear/reset functionality
+
+### 📊 User Dashboard
+
+- Activity overview
+- Quick actions
+
+---
+
+## Future Enhancements
+
+### Planned Features
+
+- Video call integration for teaching sessions
+- Calendar/scheduling system
+- Skill verification badges
+- Achievement system
+- Advanced matching filters
+- Group learning sessions
+- Resource sharing
+- Payment integration for premium features
+- Mobile app (iOS/Android)
+- Social media integration
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ or Bun
+- Modern web browser
+
+### Installation
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+### Environment Setup
+
+Enable Lovable Cloud for full functionality:
+
+- Database operations
+- User authentication
+- Real-time messaging
+- File storage
+
+---
+
+<!-- ## License
+
+[Add your license here] -->
+
+_Documentation last updated: 2025_
