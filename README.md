@@ -45,6 +45,7 @@ SkillSwap is a platform that connects people who want to exchange skills. Users 
 - **Node.js** - Server runtime environment
 - **Express.js** - Web application framework
 - **MySQL** - Primary database
+- **Prisma** - ORM for database operations
 - **Authentication** - JWT-based authentication
 
 ---
