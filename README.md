@@ -269,7 +269,7 @@ _Real-time messaging with connection management_
 
 ### Profile
 
-![Profile Page](./image/profile.png)
+![Profile Page](./image/profile-update.png)
 _Comprehensive user profile management_
 
 **Features:**
