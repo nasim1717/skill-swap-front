@@ -56,17 +56,16 @@ const Messages = () => {
         return {
           ...old,
           data: old.data.map((conv: any) => {
-            if (conv.thread_id === threadId?.toString()) {
+            if (conv.thread_id === threadId) {
               // Only increment unread if not currently viewing this thread
-              const shouldIncrementUnread =
-                selectedConversation?.thread_id !== threadId?.toString();
+              const shouldIncrementUnread = selectedConversation?.thread_id !== threadId;
 
               return {
                 ...conv,
                 last_message: {
-                  id: message.id.toString(),
+                  id: message.id,
                   message: message.message,
-                  sender_id: message.sender_id.toString(),
+                  sender_id: message.sender_id,
                   created_at: message.created_at,
                   seen: false,
                   is_own: false,
@@ -82,7 +81,7 @@ const Messages = () => {
       });
 
       // Show notification if not on current thread
-      if (selectedConversation?.thread_id !== threadId?.toString()) {
+      if (selectedConversation?.thread_id !== threadId) {
         toast.info("New message received");
       }
     };
@@ -109,7 +108,7 @@ const Messages = () => {
             ...old,
             data: old.data.map((conv: any) => {
               // Match by thread_id
-              if (threadId && conv.thread_id === threadId.toString()) {
+              if (threadId && conv.thread_id === threadId) {
                 const newUnreadCount = Math.max(0, (conv.unread_count || 0) - 1);
                 console.log(
                   `Decreasing unread count for thread ${threadId}: ${conv.unread_count} -> ${newUnreadCount}`
@@ -130,7 +129,7 @@ const Messages = () => {
       console.log(`All messages seen in thread ${threadId}`);
 
       // Update all messages in that thread to seen
-      queryClient.setQueryData(["messages", threadId.toString()], (old: any) => {
+      queryClient.setQueryData(["messages", threadId], (old: any) => {
         if (!old?.data) return old;
         return {
           ...old,
@@ -148,7 +147,7 @@ const Messages = () => {
         if (!prev) return prev;
 
         const userIdMatch =
-          prev.user.id === data.userId.toString() ||
+          prev.user.id === data.userId ||
           prev.user.id === String(data.userId) ||
           String(prev.user.id) === String(data.userId);
 
@@ -167,7 +166,7 @@ const Messages = () => {
             ...old,
             data: old.data.map((conv: any) => {
               const userIdMatch =
-                conv.user.id === data.userId.toString() ||
+                conv.user.id === data.userId ||
                 conv.user.id === String(data.userId) ||
                 String(conv.user.id) === String(data.userId);
 

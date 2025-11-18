@@ -41,7 +41,6 @@ export default function ChatWindow({
     data: messagesData,
     isPending: isLoadingMessages,
     isError,
-    error,
   } = useQuery({
     queryKey: ["messages", selectedConversation?.thread_id],
     queryFn: ({ queryKey }) => getConversationMessages(queryKey[1]),
@@ -59,7 +58,7 @@ export default function ChatWindow({
       setSelectedConversation((prev: any) => ({
         ...prev,
         status: "ACCEPTED",
-        thread_id: data.data.thread.id.toString(),
+        thread_id: data.data.thread.id,
       }));
 
       // Invalidate conversations list to refresh
@@ -67,19 +66,6 @@ export default function ChatWindow({
     },
     onError(error: any) {
       toast.error(error.message || "Failed to accept request");
-    },
-  });
-
-  // Decline request mutation
-  const { mutate: handleDeclineRequest, isPending: isDecliningRequest } = useMutation({
-    mutationFn: declineRequest,
-    onSuccess() {
-      toast.success("Request declined");
-      setSelectedConversation(null);
-      queryClient.invalidateQueries({ queryKey: ["conversations"] });
-    },
-    onError(error: any) {
-      toast.error(error.message || "Failed to decline request");
     },
   });
 
@@ -98,7 +84,7 @@ export default function ChatWindow({
     if (!socket || !isConnected || !messagesData?.data || !selectedConversation?.thread_id) return;
 
     const unseenMessages = messagesData.data.filter(
-      (msg: any) => !msg.seen && msg.receiver_id?.toString() === user?.id?.toString()
+      (msg: any) => !msg.seen && msg.receiver_id === user?.id
     );
 
     if (unseenMessages.length === 0) return;
@@ -170,45 +156,6 @@ export default function ChatWindow({
     }, 3000);
   };
 
-  // Helper function to add message without duplicates
-  const addMessageToCache = (message: any, threadId: string) => {
-    const messageId = message.id?.toString() || `temp_${Date.now()}`;
-
-    // Skip if already processed
-    if (processedMessageIds.current.has(messageId)) {
-      console.log("Skipping duplicate message:", messageId);
-      return;
-    }
-
-    processedMessageIds.current.add(messageId);
-
-    queryClient.setQueryData(["messages", threadId], (old: any) => {
-      if (!old) return old;
-
-      // Check if message already exists in cache
-      const exists = old.data?.some((m: any) => {
-        const existingId = m.id?.toString();
-        return (
-          existingId === messageId ||
-          (m.message === message.message &&
-            m.sender_id?.toString() === message.sender_id?.toString() &&
-            Math.abs(new Date(m.created_at).getTime() - new Date(message.created_at).getTime()) <
-              1000)
-        );
-      });
-
-      if (exists) {
-        console.log("Message already exists in cache");
-        return old;
-      }
-
-      return {
-        ...old,
-        data: [...(old.data || []), message],
-      };
-    });
-  };
-
   // Send message with optimistic update
   const handleSendMessage = () => {
     if (!newMessage.trim() || !socket || !isConnected) return;
@@ -265,7 +212,7 @@ export default function ChatWindow({
       console.log("Received message event:", message);
 
       // Only process if it's for current thread
-      if (message.thread_id?.toString() === selectedConversation?.thread_id) {
+      if (message.thread_id === selectedConversation?.thread_id) {
         // Remove optimistic message and add real one
         queryClient.setQueryData(["messages", selectedConversation.thread_id], (old: any) => {
           if (!old) return old;
@@ -274,7 +221,7 @@ export default function ChatWindow({
           const filtered = old.data.filter((m: any) => !m.isOptimistic);
 
           // Check if real message already exists
-          const exists = filtered.some((m: any) => m.id?.toString() === message.id?.toString());
+          const exists = filtered.some((m: any) => m.id === message.id);
 
           if (exists) return old;
 
@@ -286,7 +233,7 @@ export default function ChatWindow({
 
         // Mark as processed
         if (message.id) {
-          processedMessageIds.current.add(message.id.toString());
+          processedMessageIds.current.add(message.id);
         }
       }
     };
@@ -415,15 +362,6 @@ export default function ChatWindow({
                   <Check className="w-4 h-4 mr-1" />
                   {isAcceptingRequest ? "Accepting..." : "Accept"}
                 </Button>
-                {/* <Button
-                  onClick={() => handleDeclineRequest(selectedConversation.requestId)}
-                  size="sm"
-                  variant="outline"
-                  disabled={isDecliningRequest}
-                >
-                  <X className="w-4 h-4 mr-1" />
-                  {isDecliningRequest ? "Declining..." : "Decline"}
-                </Button> */}
               </div>
             )}
           </div>
@@ -461,7 +399,7 @@ export default function ChatWindow({
 
                     {/* Messages for this date */}
                     {messages.map((message: any, idx: number) => {
-                      const isOwnMessage = message.sender_id?.toString() === user?.id?.toString();
+                      const isOwnMessage = message.sender_id === user?.id;
 
                       return (
                         <div
