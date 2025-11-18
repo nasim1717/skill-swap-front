@@ -405,7 +405,7 @@ npm run build
 
 ### Environment Setup
 
-Enable Lovable Cloud for full functionality:
+Enable Express functionality:
 
 - Database operations
 - User authentication
